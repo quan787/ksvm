@@ -1,7 +1,8 @@
 function hpw=findhpw(array)
-array=array-array(1);
+%array=array-array(1);
+array=array(1000:end);
 peak=max(array);
-flag=0;
+%flag=0;
 % for i=1:length(array)
 %     if flag==0
 %         if array(i)>(peak/2)
