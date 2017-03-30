@@ -14,8 +14,11 @@ for i=1:length(Index)
      peak(i)=peak_i;
      hpw(i)=hpw_i;
 end
+%求梯度
+flower_tissue;
+%----
 peak=peak/(max(peak)-min(peak));
-hpw=hpw/(max(hpw)-min(hpw))/2;
+hpw=hpw/(max(hpw)-min(hpw));
 %保存所有数据
 fid=fopen('tissue.dat','w');
 for i=1:length(Index)
@@ -40,10 +43,19 @@ fclose(fid);
 %画训练数据
 figure(1);
 plot(peak_train(idx==1),hpw_train(idx==1),'g.',peak_train(idx==2),hpw_train(idx==2),'r.')
+xlabel('约化峰值高度')
+ylabel('约化梯度')
+title('训练样本聚类结果');
 figure(2);
+image(max_gra*1000);
+hold on;
 Z_train=Z(select);
 Y_train=Y(select);
-plot(Z_train(idx==1),Y_train(idx==1),'g.',Z_train(idx==2),Y_train(idx==2),'r.')
+plot(Z_train(idx==1)/300+17,Y_train(idx==1)/300+17,'g.',Z_train(idx==2)/300+17,Y_train(idx==2)/300+17,'r.')
+xlabel('像素')
+ylabel('像素')
+axis equal tight;
+title('训练样本空间分布');
 %训练和预测
 system('C:\Users\Z.Y.Li\Documents\MATLAB\ksvm\libsvm-3.22\windows\svm-train.exe tissue_train.dat tissue.model');
 system('C:\Users\Z.Y.Li\Documents\MATLAB\ksvm\libsvm-3.22\windows\svm-predict.exe tissue.dat tissue.model tissue_out.dat');
@@ -51,6 +63,9 @@ system('C:\Users\Z.Y.Li\Documents\MATLAB\ksvm\libsvm-3.22\windows\svm-predict.ex
 load tissue_out.dat;
 figure(3);
 plot(peak(tissue_out==1),hpw(tissue_out==1),'g.',peak(tissue_out==2),hpw(tissue_out==2),'r.')
+xlabel('约化峰值高度')
+ylabel('约化梯度')
+title('全部样本SVM分类结果');
 figure(4);
 for i=1:length(Index)
     max_image(Y(i)/300+17,Z(i)/300+17)=peak(i);
@@ -58,5 +73,7 @@ end
 image(max_image*100);
 hold on;
 plot(Z(tissue_out==1)/300+17,Y(tissue_out==1)/300+17,'g.',Z(tissue_out==2)/300+17,Y(tissue_out==2)/300+17,'r.')
-
-
+axis equal tight;
+xlabel('像素')
+ylabel('像素')
+title('全部样本SVM分类结果');

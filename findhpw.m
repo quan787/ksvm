@@ -17,5 +17,9 @@ peak=max(array);
 %         end
 %     end
 % end
+
 hpw=sum(array>(peak/2));
+%[~,i]=max(array);
+%hpw=i;
+%hpw=max(array)-min(array);
 end
